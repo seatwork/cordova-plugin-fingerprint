@@ -81,23 +81,35 @@ public class FingerprintDialogFragment extends DialogFragment {
 
         fingerprintManager.authenticate(new FingerprintManager.CryptoObject(cipher), cancellationSignal, 0, new FingerprintManager.AuthenticationCallback() {
 
+            // 多次认证失败后进入此方法，且短时间内不可再验
+            // errorCode是失败的次数
             @Override
             public void onAuthenticationError(int errorCode, CharSequence errString) {
                 if (!isSelfCancelled) {
                     message.setTextColor(0xffff4455);
                     message.setText(errString);
+
                     if (errorCode == FingerprintManager.FINGERPRINT_ERROR_LOCKOUT) {
-                        dismissAllowingStateLoss();
+                        message.setText("失败次数过多，请稍后再试");
+                        // 为显示错误信息，延迟 1000 毫秒执行回调
+                        message.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                dismissAllowingStateLoss();
+                            }
+                        }, 1000);
                     }
                 }
             }
 
+            // 指纹认证失败：该指纹不是系统录入的指纹
             @Override
             public void onAuthenticationFailed() {
                 message.setTextColor(0xffff4455);
                 message.setText("指纹认证失败");
             }
 
+            // 指纹认证失败：可能是手指过脏，或移动过快等原因。
             @Override
             public void onAuthenticationHelp(int helpCode, CharSequence helpString) {
                 message.setTextColor(0xff333333);
@@ -109,7 +121,7 @@ public class FingerprintDialogFragment extends DialogFragment {
                 message.setTextColor(0xff00cc77);
                 message.setText("指纹认证成功");
 
-                // 延迟 500 毫秒执行回调
+                // 为显示成功信息，延迟 500 毫秒执行回调
                 message.postDelayed(new Runnable() {
                     @Override
                     public void run() {
