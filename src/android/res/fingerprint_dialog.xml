@@ -6,8 +6,9 @@
 
     <ImageView
         android:layout_gravity="center_horizontal"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="30dp"
         android:scaleType="centerInside"
         android:src="@drawable/fingerprint" />
 
@@ -34,7 +35,7 @@
         android:gravity="center"
         android:text="取消"
         android:textStyle="bold"
-        android:textColor="#3f6576"
+        android:textColor="#4c7a8e"
         android:textSize="16sp" />
 
 </LinearLayout>

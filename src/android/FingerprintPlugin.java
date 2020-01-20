@@ -63,8 +63,9 @@ public class FingerprintPlugin extends CordovaPlugin {
      */
     private void authenticate() {
         FingerprintDialogFragment fragment = new FingerprintDialogFragment();
-        fragment.setCipher(cipher);
+        // 设置为不可取消（点击空白处无法关闭）
         fragment.setCancelable(false);
+        fragment.setCipher(cipher);
 
         FragmentTransaction ft = cordova.getActivity().getFragmentManager().beginTransaction();
         ft.add(fragment, DIALOG_FRAGMENT_TAG);

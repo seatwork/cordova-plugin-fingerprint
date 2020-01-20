@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.TextView;
 
 import javax.crypto.Cipher;
@@ -32,7 +33,20 @@ public class FingerprintDialogFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         fingerprintManager = getContext().getSystemService(FingerprintManager.class);
-        setStyle(DialogFragment.STYLE_NORMAL, android.R.style.Theme_Material_Light_Dialog);
+        // 将当前 DialogFragment 设置为无标题样式
+        setStyle(DialogFragment.STYLE_NO_TITLE, android.R.style.Theme_Material_Light_Dialog);
+    }
+
+    /**
+     * 重新设置 dialog 宽度为屏幕的 80% （最小宽度样式太宽）
+     * 设置宽高必须在 onStart 或 onResume 方法中实现
+     */
+    @Override
+    public void onStart() {
+        super.onStart();
+        Window window = getDialog().getWindow();
+        int width = window.getWindowManager().getDefaultDisplay().getWidth();
+        window.setLayout((int) (width * 0.8), ViewGroup.LayoutParams.WRAP_CONTENT);
     }
 
     @Override
